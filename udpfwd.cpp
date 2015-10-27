@@ -14,6 +14,8 @@ using std::map;
 
 namespace UdpForwarder {
 
+const u_short       kSocksServerPort = 9080;
+
 void parse_dns(const char* in, char* out, size_t limit) {
     const char* iptr = in;
     char* optr = out;
@@ -42,7 +44,7 @@ int init_ss() {
     int ss_sock = socket(AF_INET, SOCK_STREAM, 0);
     ::sockaddr_in ss_addr;
     ss_addr.sin_family = AF_INET;
-    ss_addr.sin_port = htons(8090);
+    ss_addr.sin_port = htons(kSocksServerPort);
     ss_addr.sin_addr.s_addr = ::inet_addr("127.0.0.1");
 
     if (::connect(ss_sock, reinterpret_cast<sockaddr*>(&ss_addr), sizeof(ss_addr)) < 0) {
@@ -119,7 +121,7 @@ int udp_via_socks(char *data, size_t size) {
     int data_sock = socket(AF_INET, SOCK_DGRAM, 0);
     ::sockaddr_in ss_addr;
     ss_addr.sin_family = AF_INET;
-    ss_addr.sin_port = htons(8090);
+    ss_addr.sin_port = htons(kSocksServerPort);
     ss_addr.sin_addr.s_addr = ::inet_addr("127.0.0.1");
 
     if (::connect(data_sock, reinterpret_cast<sockaddr*>(&ss_addr), sizeof(ss_addr)) < 0) {
